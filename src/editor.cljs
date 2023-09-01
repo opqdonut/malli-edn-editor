@@ -69,7 +69,7 @@
   (let [valid? (m/validate schema value)]
     [:input {:type :text
              :class (when-not valid? :malli-editor-invalid)
-             :value (m/encode schema value mt/string-transformer)
+             :default-value (m/encode schema value mt/string-transformer)
              :on-change #(on-change (m/decode schema (-> % .-target .-value) mt/string-transformer))}]))
 
 (defmethod edit :string [schema value on-change]
@@ -79,7 +79,6 @@
   [:div.malli-editor-int
    [input-field schema value on-change]])
 
- ;; TODO can't edit 3 -> 3.2 right now
 (defmethod edit :double [schema value on-change]
   [:div.malli-editor-double
    [input-field schema value on-change]])
