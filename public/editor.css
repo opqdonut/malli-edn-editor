@@ -29,3 +29,7 @@
 .malli-editor select {
     font-family: inherit;
 }
+
+.malli-editor-example h2 {
+    font-family: monospace;
+}

@@ -123,9 +123,8 @@
 (defmethod edit :map [schema value on-change]
   (let [map-schema (m/children schema)
         known-keys (->> map-schema
-                        ;; sort primarily by optionality, then name
-                        (sort-by (juxt #(:optional (second %))
-                                       first))
+                        ;; mandatory keys first
+                        (sort-by #(:optional (second %)))
                         (map first))
         {present-keys true missing-keys false} (group-by #(contains? value %) known-keys)
         extra-value (apply dissoc value known-keys)]
@@ -298,14 +297,22 @@
    :instructions ["please" "send" "help"]
    :foo [1 "hello" false]})
 
-(defn example []
-  (let [value (r/atom example-value)]
+(defn example [schema initial-value]
+  (let [value (r/atom initial-value)]
     (fn []
-      [:div
-       [:pre (with-out-str (cljs.pprint/pprint @value))]
-       [editor example-schema @value #(reset! value %)]])))
+      [:div.malli-editor-example
+       [:div {:style {:display :flex}}
+        [:div
+         [:h2 "Editor"]
+         [editor schema @value #(reset! value %)]]
+        [:div
+         [:h2 "Value"]
+         [:pre (with-out-str (cljs.pprint/pprint @value))]]
+        [:div
+         [:h2 "Schema"]
+         [:pre (with-out-str (cljs.pprint/pprint schema))]]]])))
 
 (defn ^:dev/after-load init []
   (reagent.dom/render
-   [example]
+   [example example-schema example-value]
    (.getElementById js/document "root")))
