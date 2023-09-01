@@ -104,10 +104,10 @@
     text]])
 
 (defn btn-plus [on-click]
-  [btn "<+>" on-click])
+  [btn "+" on-click])
 
 (defn btn-minus [on-click]
-  [btn "<->" on-click])
+  [btn "–" on-click])
 
 (defmethod edit :maybe [schema value on-change]
   (let [child (first (m/children schema))]
@@ -136,9 +136,9 @@
          (let [[_ properties value-schema] (mu/find schema k)]
            ^{:key (str k)}
            [:div.malli-editor-key-value {:style {:display :flex}}
+            [:div.malli-editor-key (pr-str k)]
             (when (:optional properties)
               [btn-minus #(on-change (dissoc value k))])
-            [:div.malli-editor-key (pr-str k)]
             (when-let [[_ v] (find value k)]
               [:div.malli-editor-value {:style {:margin-left "0.5em"}}
                [edit value-schema v #(on-change (assoc value k %))]])]))
@@ -149,12 +149,12 @@
             [btn (str "<+" (pr-str k) ">") #(on-change (assoc value k (default-value value-schema)))]))]
        (when-not (empty? extra-value)
          [:div.malli-editor-extra-keys
-          [:div.malli-editor-extra-keys-title "extra keys:"]
+          [:div.malli-editor-extra-keys-title ";; extra keys:"]
           (for [[k v] extra-value]
             ^{:key (str k)}
             [:div {:style {:display :flex}}
-             [btn-minus #(on-change (dissoc value k))]
              [:div.malli-editor-key (pr-str k)]
+             [btn-minus #(on-change (dissoc value k))]
              [:div.malli-editor-value {:style {:margin-left "0.5em"}}
               (pr-str v)]])])]]]))
 
@@ -208,7 +208,7 @@
                        (->> schema m/entries first key)
                        (first p))]
     [:div.malli-editor-orn
-     (into [:div.malli-editor-orn-choices]
+     (into [:div.malli-editor-orn-choices ";;"]
            (for [[k _p value-schema] (m/children schema)]
              (let [label (pr-str k)
                    id (str nom "--" label)]
@@ -229,7 +229,7 @@
                     :label (pr-str (:type (m/ast c)))})
         first-valid (first (filter :valid children))]
     [:div.malli-editor-or
-     (into [:div.malli-editor-or-choices]
+     (into [:div.malli-editor-or-choices ";;"]
            (for [c children]
              (let [id (str nom "--" (:label c))]
                [:<>
@@ -254,10 +254,12 @@
 
 ;; TODO: support overriding editors per schema
 (defn editor [schema value on-change]
-  [edit schema value on-change])
+  [:div.malli-editor
+   [edit schema value on-change]])
 
 (defn editor-in [schema value path on-change]
-  [edit (mu/get-in schema path) (get-in value path) #(on-change (assoc-in value path %))])
+  [:div.malli-editor
+   [edit (mu/get-in schema path) (get-in value path) #(on-change (assoc-in value path %))]])
 
 (def example-schema
   [:map

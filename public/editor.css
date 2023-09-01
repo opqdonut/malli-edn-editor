@@ -1,0 +1,31 @@
+.malli-editor-or-choices,
+.malli-editor-orn-choices,
+.malli-editor-extra-keys-title {
+    color: #8f8dac;
+}
+
+.malli-editor-btn a:link,
+.malli-editor-btn a:visited {
+    color: white;
+    text-decoration: none;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background: #b9b8cb;
+    border-radius: 0.1em;
+}
+
+.malli-editor {
+    font-family: monospace;
+    color: #151640;
+    line-height: 2;
+}
+
+.malli-editor input {
+    font-family: inherit;
+    color: inherit;
+    border: 1px solid #b9b8cb;
+}
+
+.malli-editor select {
+    font-family: inherit;
+}
