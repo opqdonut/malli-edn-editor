@@ -22,6 +22,7 @@
 
 .malli-editor input {
     font-family: inherit;
+    font-size: inherit;
     color: inherit;
     border: 1px solid #b9b8cb;
 }
@@ -32,6 +33,7 @@
 
 .malli-editor select {
     font-family: inherit;
+    font-size: inherit;
 }
 
 .malli-editor-example h2 {
