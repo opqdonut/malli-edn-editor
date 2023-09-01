@@ -66,9 +66,11 @@
 
  ;; TODO validation errors
 (defn input-field [schema value on-change]
-  [:input {:type :text
-           :value (m/encode schema value mt/string-transformer)
-           :on-change #(on-change (m/decode schema (-> % .-target .-value) mt/string-transformer))}])
+  (let [valid? (m/validate schema value)]
+    [:input {:type :text
+             :class (when-not valid? :malli-editor-invalid)
+             :value (m/encode schema value mt/string-transformer)
+             :on-change #(on-change (m/decode schema (-> % .-target .-value) mt/string-transformer))}]))
 
 (defmethod edit :string [schema value on-change]
   [:div.malli-editor-string "\"" [input-field schema value on-change] "\""])
@@ -275,7 +277,7 @@
    [:address
     [:orn
      [:structured [:map
-                   [:street :string]
+                   [:street [:string {:min 1}]]
                    [:number {:optional true} :int]]]
      [:raw :string]]]
    [:items

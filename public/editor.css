@@ -26,6 +26,10 @@
     border: 1px solid #b9b8cb;
 }
 
+.malli-editor-invalid {
+    background: #fc9483
+}
+
 .malli-editor select {
     font-family: inherit;
 }
