@@ -6,6 +6,9 @@
             [malli.transform :as mt]
             [malli.util :as mu]))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; default-value multimethod for initializing new entries
+
 (defmulti default-value (fn [schema]
                           (when schema
                             (:type (m/ast schema)))))
@@ -47,6 +50,9 @@
 
 (defmethod default-value :ref [schema]
   (default-value (m/deref schema)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; edit multimethod: editor ui per malli schema type
 
 (defmulti edit (fn [schema _value _on-change]
                  (when schema
@@ -250,6 +256,9 @@
 
 (defmethod edit :ref [schema value on-change]
   [edit (m/deref schema) value on-change])
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; main entry points
 
 ;; TODO: support overriding editors per schema
 (defn editor [schema value on-change]
